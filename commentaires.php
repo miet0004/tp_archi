@@ -1,8 +1,8 @@
-<!doctype html> 
+<!doctype html>
 <html>
-	<head> 
+	<head>
 		<meta charset="utf-8">
-	</head> 
+	</head>
 	<body>
 		<form method="POST">
 			<input type="text" name="nom" placeholder="Nom"><br>
@@ -22,15 +22,17 @@
 					echo "Erreur SQL:$req<br>".mysqli_error($lien);
 				}
 			}
-			
-			if(!isset($_GET['page']))
+
+			if(!isset($_GET['page']) AND $_GET ['page']> 0)
 			{
 				$page=1;
 			}
+
 			else
 			{
 				$page=$_GET['page'];
 			}
+
 			$commparpage=3;
 			$premiercomm=$commparpage*($page-1);
 			$req="SELECT * FROM comment ORDER BY id LIMIT $premiercomm,$commparpage";/* LIMIT dit ou je commence et combien j'en prends*/
@@ -47,7 +49,7 @@
 					echo "<p>".$tableau['contenu']."</p>";
 				}
 			}
-			
+
 			$req="SELECT * FROM comment";
 			$res=mysqli_query($lien,$req);
 			if(!$res)
@@ -56,19 +58,20 @@
 			}
 			else
 			{
-				$nbcomm=mysqli_num_rows($res); // Retourne le nombre de lignes dans un résultat. 
-				$liste=mysqli_fetch_array($res);
-				$nbpages=ceil($nbcomm/$commparpage); /*Ceil arrondit a l'entier supérieur*/
+				$nbcomm=mysqli_num_rows($res); // Retourne le nombre de lignes dans un rÃ©sultat.
+				$nbpages=ceil($nbcomm/$commparpage); /*Ceil arrondit a l'entier supÃ©rieur*/
 				echo "<br> Pages : ";
 				echo "<a href='commentaires.php?page=1'> << </a>";
-				echo "<a href='commentaires.php?page=(".($page-1).")'> < </a>";
-				for($i=($page-2);$i<=($page+2);$i++)
+				echo "<a href='commentaires.php?page=".($page-1)."'> < </a>";
+				for($i=1;$i<=$nbpages;$i++)
 				{
 					echo "<a href='commentaires.php?page=$i'> $i </a>";
 				}
 			}
 			echo "<a href='commentaires.php?page=".($page+1)."'> > </a>";
 			echo "<a href='commentaires.php?page=$nbpages'> >> </a>";
-			
+
 			mysqli_close($lien);
-		?>																			
+		?>
+	</body>
+</html>
